@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encuentra tu Talla Ideal</title>
+    <style>
+        /* Agrega tu CSS aquí */
+    </style>
+</head>
+<body>
+    <h1>Encuentra tu Talla Ideal</h1>
+    <form id="sizeForm">
+        <input type="number" id="waist" placeholder="Cintura (cm)" required>
+        <input type="number" id="hip" placeholder="Cadera (cm)" required>
+        <button type="submit">Obtener Talla</button>
+    </form>
+    <div id="result"></div>
+    <script>
+        const backendUrl = 'https://tu-app.herokuapp.com';
+
+        document.getElementById('sizeForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const waist = document.getElementById('waist').value;
+            const hip = document.getElementById('hip').value;
+            const response = await fetch(`${backendUrl}/find-size`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ waist, hip })
+            });
+            const result = await response.json();
+            if (response.ok) {
+                document.getElementById('result').innerText = `Tu talla ideal es: ${result.size}`;
+            } else {
+                document.getElementById('result').innerText = `Error: ${result.error}`;
+            }
+        });
+    </script>
+    <script src="/assets/js/index.js"></script>
+</body>
+</html>
